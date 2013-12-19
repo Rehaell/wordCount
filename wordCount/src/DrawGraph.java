@@ -8,6 +8,7 @@ import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -15,15 +16,15 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class DrawGraph extends JPanel {
-   private static final int MAX_SCORE = 20;
+   private static int MAX_SCORE;
    private static final int PREF_W = 900;
    private static final int PREF_H = 650;
-   private static final int BORDER_GAP = 30;
+   private static final int BORDER_GAP = 10;
    private static final Color GRAPH_COLOR = Color.green;
    private static final Color GRAPH_POINT_COLOR = new Color(150, 50, 50, 180);
    private static final Stroke GRAPH_STROKE = new BasicStroke(3f);
-   private static final int GRAPH_POINT_WIDTH = 12;
-   private static final int Y_HATCH_CNT = 10;
+   private static final int GRAPH_POINT_WIDTH = 10;
+   private static int Y_HATCH_CNT;
    private List<Integer> scores;
 
    public DrawGraph(List<Integer> scores) {
@@ -37,7 +38,7 @@ public class DrawGraph extends JPanel {
       g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
       double xScale = ((double) getWidth() - 2 * BORDER_GAP) / (scores.size() - 1);
-      double yScale = ((double) getHeight() - 2 * BORDER_GAP) / (MAX_SCORE - 1);
+      double yScale = ((double) getHeight() - 2 * BORDER_GAP) / (MAX_SCORE-1);
 
       List<Point> graphPoints = new ArrayList<Point>();
       for (int i = 0; i < scores.size(); i++) {
@@ -96,15 +97,22 @@ public class DrawGraph extends JPanel {
    }
    
    public static void createAndShowGui(Map<String, Integer> palavrasMapa) {
-	      List<Integer> scores = new ArrayList(palavrasMapa.values());
-	    
-	      DrawGraph mainPanel = new DrawGraph(scores);
-
-	      JFrame frame = new JFrame("DrawGraph");
-	      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	      frame.getContentPane().add(mainPanel);
-	      frame.pack();
-	      frame.setLocationByPlatform(true);
-	      frame.setVisible(true);
+	   MAX_SCORE = Collections.max(palavrasMapa.values());
+	   List<Integer> scores = new ArrayList(palavrasMapa.values());
+	   
+	   Integer soma = 0;
+	   for(int i:scores){
+		   soma += i;
 	   }
+	   Y_HATCH_CNT = soma / MAX_SCORE;
+	   
+	   DrawGraph mainPanel = new DrawGraph(scores);
+	   
+	   JFrame frame = new JFrame("DrawGraph");
+	   frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	   frame.getContentPane().add(mainPanel);
+	   frame.pack();
+	   frame.setLocationByPlatform(true);
+	   frame.setVisible(true);
+	}
 }

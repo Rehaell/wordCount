@@ -11,7 +11,7 @@ public class mainWindow extends JFrame implements ActionListener {
 	JLabel numeroPalavras = new JLabel("Numero total de palavras contadas : ");
 	JButton calcularBotao = new JButton("Contar palavras");
 	JButton relatorioBotao = new JButton("Gerar relatorio");
-	
+	JButton limparBotao = new JButton("Limpar TUDO");
 	Map<String, Integer> palavrasContadas = new HashMap<String, Integer>();
 	
 	public mainWindow(){
@@ -35,12 +35,13 @@ public class mainWindow extends JFrame implements ActionListener {
 		calcularBotao.addActionListener(this);
 		//relatorioBotao.setEnabled(false);
 		relatorioBotao.addActionListener(this);
+		limparBotao.addActionListener(this);
 		
 		
 		mainInfo.add(numeroPalavras);
 		mainInfo.add(calcularBotao);
 		mainInfo.add(relatorioBotao);
-		
+		mainInfo.add(limparBotao);
 		add(mainInfo);
 		
 		pack();
@@ -57,9 +58,20 @@ public class mainWindow extends JFrame implements ActionListener {
 					DrawGraph.createAndShowGui(palavrasContadas);
 		        }
 		    });	
-		}		
+		}
+		else if (event.getSource() == limparBotao){
+			limparTudo();
+		}
+			
 	}
 	
+	private void limparTudo(){
+		textoArea.setText("");
+		textoArea.setEditable(true);
+		relatorioBotao.setEnabled(false);
+		numeroPalavras.setText("Numero de palavras contadas :");
+		palavrasContadas.clear();
+	}
 	private void contarPalavras(){
 		textoArea.setEditable(false);
 		String[] txt = textoArea.getText().toLowerCase().split("\\s+");
